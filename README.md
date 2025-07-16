@@ -13,12 +13,6 @@
 
 ---
 
-## 📷 Vista previa
-
-![Preview](public/preview.png)
-
----
-
 ## 🚀 Funcionalidades principales
 
 - 🧾 Registro y control de gastos
