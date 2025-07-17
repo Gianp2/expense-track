@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
+import { BiTrash } from "react-icons/bi";
 
-export default function ExpenseList({ items }) {
+export default function ExpenseList({ items, onDelete }) {
   if (!items.length) return <p className="text-center mt-6">No hay registros.</p>;
 
   return (
@@ -8,7 +9,7 @@ export default function ExpenseList({ items }) {
       {items.map((item, index) => (
         <motion.div
           key={item.id}
-          className={`flex justify-between p-3 rounded shadow ${
+          className={`flex justify-between items-center p-3 rounded shadow ${
             item.type === "gasto" ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
           }`}
           initial={{ opacity: 0, y: 10 }}
@@ -20,8 +21,22 @@ export default function ExpenseList({ items }) {
             <p className="text-sm">{item.description || "-"}</p>
             <p className="text-xs text-gray-600">{new Date(item.date).toLocaleDateString()}</p>
           </div>
-          <div className="text-lg font-bold">
-            {item.amount.toLocaleString(undefined, { style: "currency", currency: item.currency })}
+          <div className="flex items-center gap-2">
+            <p className="text-lg font-bold">
+              {item.amount.toLocaleString(undefined, {
+                style: "currency",
+                currency: item.currency
+              })}
+            </p>
+            {onDelete && (
+              <button
+                onClick={() => onDelete(item.id)}
+                className="text-red-600 hover:text-red-800 transition"
+                title="Eliminar"
+              >
+                <BiTrash size={20} />
+              </button>
+            )}
           </div>
         </motion.div>
       ))}
