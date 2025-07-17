@@ -1,156 +1,137 @@
 import { useState } from "react";
-import {
-  FaMoneyBillWave,
-  FaCalendarAlt,
-  FaTags,
-  FaCoins,
-  FaList,
-  FaComment,
-} from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
-const monedas = [
-  { code: "ARS", label: "Peso Argentino (ARS)" },
-  { code: "USD", label: "Dólar Americano (USD)" },
-  { code: "EUR", label: "Euro (EUR)" },
-];
-
-const categorias = [
-  "Alimentos",
-  "Transporte",
-  "Salud",
-  "Educación",
-  "Entretenimiento",
-  "Servicios",
-  "Otros",
-];
-
-export default function ExpenseForm({ onAdd }) {
+export default function ExpenseForm({ onAdd, categories, setCategories, monedas }) {
   const [form, setForm] = useState({
-    type: "gasto", // "gasto" o "ingreso"
-    amount: "",
-    category: categorias[0],
-    currency: monedas[0].code,
-    date: new Date().toISOString().slice(0, 10),
     description: "",
+    amount: 0,
+    date: new Date().toISOString().slice(0, 10),
+    type: "gasto",
+    category: "",
+    currency: monedas[0]?.code || "ARS", // Inicializa con la primera moneda disponible
   });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.amount || isNaN(form.amount) || Number(form.amount) <= 0) {
-      alert("Ingrese un monto válido");
+    if (!form.description || form.amount <= 0 || !form.category) {
+      toast.error("Completa todos los campos");
       return;
     }
 
     onAdd({
       ...form,
       amount: Number(form.amount),
-      id: Date.now(),
+      id: crypto.randomUUID(),
     });
 
     setForm({
       ...form,
-      amount: "",
       description: "",
+      amount: 0,
+      category: "",
     });
+    toast.success("Movimiento agregado");
+  };
+
+  const handleAddCategory = () => {
+    const nueva = prompt("Nombre de la nueva categoría:");
+    if (nueva && !categories.find((c) => c.name === nueva)) {
+      setCategories([...categories, { name: nueva }]);
+      toast.success(`Categoría "${nueva}" agregada`);
+    } else if (nueva) {
+      toast.error("La categoría ya existe");
+    }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-4 bg-white dark:bg-gray-800 rounded shadow space-y-4"
+      className="bg-white dark:bg-gray-800 p-4 rounded shadow space-y-4"
     >
-      <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaList /> Tipo
-        </label>
-        <select
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.type}
-          onChange={(e) => setForm({ ...form, type: e.target.value })}
-        >
-          <option value="gasto">Gasto</option>
-          <option value="ingreso">Ingreso</option>
-        </select>
-      </div>
+      <h3 className="text-xl font-semibold">Agregar Movimiento</h3>
 
-      <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaMoneyBillWave /> Monto
-        </label>
-        <input
-          type="number"
-          step="0.01"
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.amount}
-          onChange={(e) => setForm({ ...form, amount: e.target.value })}
-          placeholder="Ej: 1000.00"
-          required
-        />
-      </div>
+      <input
+        type="text"
+        name="description"
+        value={form.description}
+        onChange={handleChange}
+        placeholder="Descripción"
+        className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700"
+      />
 
-      <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaTags /> Categoría
-        </label>
+      <input
+        type="number"
+        name="amount"
+        value={form.amount}
+        onChange={handleChange}
+        placeholder="Monto"
+        className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700"
+      />
+
+      <input
+        type="date"
+        name="date"
+        value={form.date}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700"
+      />
+
+      <select
+        name="type"
+        value={form.type}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700"
+      >
+        <option value="gasto">Gasto</option>
+        <option value="ingreso">Ingreso</option>
+      </select>
+
+      {/* Moneda */}
+      <select
+        name="currency"
+        value={form.currency}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700"
+      >
+        <option value="">Seleccionar moneda</option>
+        {monedas.map((moneda) => (
+          <option key={moneda.code} value={moneda.code}>
+            {moneda.label}
+          </option>
+        ))}
+      </select>
+
+      {/* Categoría */}
+      <div className="flex items-center gap-2">
         <select
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
+          name="category"
           value={form.category}
-          onChange={(e) => setForm({ ...form, category: e.target.value })}
+          onChange={handleChange}
+          className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700"
         >
-          {categorias.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+          <option value="">Seleccionar categoría</option>
+          {categories.map((cat, i) => (
+            <option key={i} value={cat.name}>
+              {cat.name}
             </option>
           ))}
         </select>
-      </div>
-
-      <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaCoins /> Moneda
-        </label>
-        <select
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.currency}
-          onChange={(e) => setForm({ ...form, currency: e.target.value })}
+        <button
+          type="button"
+          onClick={handleAddCategory}
+          className="bg-blue-500 text-white px-2 py-1 rounded"
         >
-          {monedas.map(({ code, label }) => (
-            <option key={code} value={code}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaCalendarAlt /> Fecha
-        </label>
-        <input
-          type="date"
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.date}
-          onChange={(e) => setForm({ ...form, date: e.target.value })}
-          required
-        />
-      </div>
-
-      <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaComment /> Descripción (opcional)
-        </label>
-        <input
-          type="text"
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          placeholder="Ej: Compras en supermercado"
-        />
+          + Cat
+        </button>
       </div>
 
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 w-full"
       >
         Agregar
       </button>
