@@ -1,153 +1,110 @@
 import { useState } from "react";
-import {
-  FaMoneyBillWave,
-  FaCalendarAlt,
-  FaTags,
-  FaCoins,
-  FaList,
-  FaComment,
-} from "react-icons/fa";
 
-const monedas = [
-  { code: "ARS", label: "Peso Argentino (ARS)" },
-  { code: "USD", label: "Dólar Americano (USD)" },
-  { code: "EUR", label: "Euro (EUR)" },
-];
-
-const categorias = [
-  "Alimentos",
-  "Transporte",
-  "Salud",
-  "Educación",
-  "Entretenimiento",
-  "Servicios",
-  "Otros",
-];
-
-export default function ExpenseForm({ onAdd }) {
-  const [form, setForm] = useState({
-    type: "gasto", // "gasto" o "ingreso"
-    amount: "",
-    category: categorias[0],
-    currency: monedas[0].code,
-    date: new Date().toISOString().slice(0, 10),
-    description: "",
-  });
+export default function ExpenseForm({ onAdd, expenseCategories, incomeCategories, monedas }) {
+  const [type, setType] = useState("gasto");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("");
+  const [date, setDate] = useState("");
+  const [currency, setCurrency] = useState("ARS");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.amount || isNaN(form.amount) || Number(form.amount) <= 0) {
-      alert("Ingrese un monto válido");
+    if (!amount || !category || !date || !currency) {
+      alert("Por favor, completá todos los campos");
       return;
     }
 
     onAdd({
-      ...form,
-      amount: Number(form.amount),
+      type,
+      amount: Number(amount),
+      category,
+      date,
+      currency,
+      description,
       id: Date.now(),
     });
 
-    setForm({
-      ...form,
-      amount: "",
-      description: "",
-    });
+    setAmount("");
+    setCategory("");
+    setDate("");
+    setCurrency("ARS");
+    setDescription("");
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-4 bg-white dark:bg-gray-800 rounded shadow space-y-4"
-    >
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaList /> Tipo
-        </label>
+        <label className="block text-gray-700 dark:text-gray-300">Tipo</label>
         <select
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.type}
-          onChange={(e) => setForm({ ...form, type: e.target.value })}
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
         >
           <option value="gasto">Gasto</option>
           <option value="ingreso">Ingreso</option>
         </select>
       </div>
-
       <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaMoneyBillWave /> Monto
-        </label>
+        <label className="block text-gray-700 dark:text-gray-300">Monto</label>
         <input
           type="number"
-          step="0.01"
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.amount}
-          onChange={(e) => setForm({ ...form, amount: e.target.value })}
-          placeholder="Ej: 1000.00"
-          required
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+          placeholder="Ej: 1000"
+          min="0"
         />
       </div>
-
       <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaTags /> Categoría
-        </label>
+        <label className="block text-gray-700 dark:text-gray-300">Moneda</label>
         <select
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.category}
-          onChange={(e) => setForm({ ...form, category: e.target.value })}
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
         >
-          {categorias.map((cat) => (
+          <option value="">Seleccionar moneda</option>
+          {monedas.map((moneda) => (
+            <option key={moneda.code} value={moneda.code}>
+              {moneda.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label className="block text-gray-700 dark:text-gray-300">Categoría</label>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+        >
+          <option value="">Seleccionar</option>
+          {(type === "gasto" ? expenseCategories : incomeCategories).map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
           ))}
         </select>
       </div>
-
       <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaCoins /> Moneda
-        </label>
-        <select
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.currency}
-          onChange={(e) => setForm({ ...form, currency: e.target.value })}
-        >
-          {monedas.map(({ code, label }) => (
-            <option key={code} value={code}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaCalendarAlt /> Fecha
-        </label>
+        <label className="block text-gray-700 dark:text-gray-300">Fecha</label>
         <input
           type="date"
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.date}
-          onChange={(e) => setForm({ ...form, date: e.target.value })}
-          required
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
         />
       </div>
-
       <div>
-        <label className="block mb-1 font-semibold flex items-center gap-2">
-          <FaComment /> Descripción (opcional)
-        </label>
+        <label className="block text-gray-700 dark:text-gray-300">Descripción</label>
         <input
           type="text"
-          className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-black dark:text-white"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          placeholder="Ej: Compras en supermercado"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+          placeholder="Opcional"
         />
       </div>
-
       <button
         type="submit"
         className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
