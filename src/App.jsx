@@ -47,7 +47,7 @@ function App() {
             whileHover="hover"
           >
             <img
-              src="public\logo.png"
+              src="logo.png"
               alt="ExpenseTrack Logo"
               className="h-8 w-8 object-contain"
               aria-hidden="true"
