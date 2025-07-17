@@ -1,12 +1,65 @@
-# React + Vite
+<h1 align="center">💸 ExpenseTrack</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  Aplicación web moderna para gestionar tus gastos personales de forma clara, visual e intuitiva.
+</p>
 
-Currently, two official plugins are available:
+<div align="center">
+  <img src="https://img.shields.io/badge/React-18-blue?style=flat-square&logo=react" />
+  <img src="https://img.shields.io/badge/TailwindCSS-3.0-teal?style=flat-square&logo=tailwindcss" />
+  <img src="https://img.shields.io/badge/Framer--Motion-Animation-purple?style=flat-square&logo=framer" />
+  <img src="https://img.shields.io/badge/Chart.js-Visualización-orange?style=flat-square&logo=chartdotjs" />
+</div>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Funcionalidades principales
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🧾 Registro y control de gastos
+- 📊 Gráficos interactivos por categoría
+- 🌙 Modo oscuro y claro con toggle
+- 🔐 Login de usuario
+- 🧠 Datos persistentes con LocalStorage
+- 📅 Filtros por mes, fecha y categoría
+- 🛎 Alertas al superar presupuesto
+- 🌍 Soporte multi-moneda (ARS, USD, EUR, etc.)
+- 📱 Responsive: diseño adaptado para dispositivos móviles
+
+---
+
+## ✨ Funcionalidades futuras
+
+- 👥 Soporte para múltiples usuarios y roles (admin / usuario)
+- 📤 Exportar datos a CSV / PDF
+- 📩 Notificaciones por email
+- 🧠 Backup automático
+- 📈 Dashboard con IA predictiva (versión futura)
+
+---
+
+## 🛠 Tecnologías usadas
+
+- **React.js** — UI basada en componentes
+- **Tailwind CSS** — Estilos rápidos y modernos
+- **Framer Motion** — Animaciones suaves
+- **Chart.js** — Gráficos interactivos
+- **React Router** — Navegación SPA
+- **React Hot Toast** — Notificaciones elegantes
+- **LocalStorage** — Persistencia de datos
+
+---
+
+## ⚙️ Instalación local
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/Gianp2/expense-track.git
+
+# Entrar en la carpeta del proyecto
+cd expense-track
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en modo desarrollo
+npm run dev

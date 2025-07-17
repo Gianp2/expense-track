@@ -33,15 +33,26 @@ export default function ExpenseList({ items, onDelete }) {
             </p>
           </div>
           <div className="flex items-center gap-2">
+<<<<<<< HEAD
             <p className="text-lg font-bold whitespace-nowrap">
               {item.amount.toLocaleString(undefined, {
                 style: "currency",
                 currency: item.currency,
+=======
+            <p className="text-lg font-bold">
+              {item.amount.toLocaleString(undefined, {
+                style: "currency",
+                currency: item.currency
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
               })}
             </p>
             {onDelete && (
               <button
+<<<<<<< HEAD
                 onClick={() => handleDelete(item.id)}
+=======
+                onClick={() => onDelete(item.id)}
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
                 className="text-red-600 hover:text-red-800 transition"
                 title="Eliminar"
               >

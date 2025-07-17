@@ -5,7 +5,11 @@ import ExpenseList from "../auth/ExpenseList";
 import SummaryChart from "../components/SummaryChart";
 import { useAuth } from "../auth/AuthContext";
 import { Toaster, toast } from "react-hot-toast";
+<<<<<<< HEAD
 import { FaWallet, FaChartPie, FaList, FaUserCircle, FaFilter } from "react-icons/fa";
+=======
+import { FaWallet, FaChartPie, FaList, FaUserCircle } from "react-icons/fa";
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
 
 // Animaciones
 const containerVariants = {
@@ -26,7 +30,13 @@ const childVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
+<<<<<<< HEAD
 // Monedas
+=======
+// Categorías y monedas
+const expenseCategories = ["Comida", "Transporte", "Vivienda", "Entretenimiento", "Otros"];
+const incomeCategories = ["Sueldo", "Freelance", "Inversiones", "Otros"];
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
 const monedas = [
   { code: "ARS", label: "Peso Argentino (ARS)" },
   { code: "USD", label: "Dólar Americano (USD)" },
@@ -81,6 +91,7 @@ export default function Dashboard() {
   }, [expenses, user.email]);
 
   useEffect(() => {
+<<<<<<< HEAD
     localStorage.setItem(
       `budget_${user.email}`,
       JSON.stringify({ amount: budgetInput, currency: budgetCurrency })
@@ -159,6 +170,66 @@ export default function Dashboard() {
       );
     });
   }, [expenses, filters]);
+=======
+    localStorage.setItem(`budget_${user.email}`, JSON.stringify({ amount: budgetInput, currency: budgetCurrency }));
+  }, [budgetInput, budgetCurrency, user.email]);
+
+  // Cálculo de gastos e ingresos del mes actual por moneda
+  const gastoMesActualPorMoneda = useMemo(() => {
+    return expenses
+      .filter(e => e.type === "gasto")
+      .filter(e => {
+        const fecha = new Date(e.date);
+        const ahora = new Date();
+        return (
+          fecha.getMonth() === ahora.getMonth() &&
+          fecha.getFullYear() === ahora.getFullYear()
+        );
+      })
+      .reduce((acc, cur) => {
+        acc[cur.currency] = (acc[cur.currency] || 0) + cur.amount;
+        return acc;
+      }, {});
+  }, [expenses]);
+
+  const ingresoMesActualPorMoneda = useMemo(() => {
+    return expenses
+      .filter(e => e.type === "ingreso")
+      .filter(e => {
+        const fecha = new Date(e.date);
+        const ahora = new Date();
+        return (
+          fecha.getMonth() === ahora.getMonth() &&
+          fecha.getFullYear() === ahora.getFullYear()
+        );
+      })
+      .reduce((acc, cur) => {
+        acc[cur.currency] = (acc[cur.currency] || 0) + cur.amount;
+        return acc;
+      }, {});
+  }, [expenses]);
+
+  // Resumen por categoría y moneda
+  const gastosPorCategoriaYMoneda = useMemo(() => {
+    return expenses
+      .filter(e => e.type === "gasto")
+      .reduce((acc, curr) => {
+        const key = `${curr.category}_${curr.currency}`;
+        acc[key] = (acc[key] || 0) + curr.amount;
+        return acc;
+      }, {});
+  }, [expenses]);
+
+  const ingresosPorCategoriaYMoneda = useMemo(() => {
+    return expenses
+      .filter(e => e.type === "ingreso")
+      .reduce((acc, curr) => {
+        const key = `${curr.category}_${curr.currency}`;
+        acc[key] = (acc[key] || 0) + curr.amount;
+        return acc;
+      }, {});
+  }, [expenses]);
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
 
   useEffect(() => {
     const gastoTotal = gastoMesActualPorMoneda[budgetCurrency] || 0;
@@ -195,6 +266,7 @@ export default function Dashboard() {
     toast.success("Presupuesto guardado");
   };
 
+<<<<<<< HEAD
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
@@ -209,6 +281,8 @@ export default function Dashboard() {
     });
   };
 
+=======
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Buenos días";
@@ -263,7 +337,11 @@ export default function Dashboard() {
                 min="0"
                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:ring-2 focus:ring-green-500 transition"
                 value={budgetInput}
+<<<<<<< HEAD
                 onChange={(e) => setBudgetInput(Number(e.target.value))}
+=======
+                onChange={e => setBudgetInput(Number(e.target.value))}
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
                 placeholder="Ej: 50000"
                 aria-label="Ingresar presupuesto mensual"
               />
@@ -272,7 +350,11 @@ export default function Dashboard() {
               <label className="block text-gray-700 dark:text-gray-300">Moneda</label>
               <select
                 value={budgetCurrency}
+<<<<<<< HEAD
                 onChange={(e) => setBudgetCurrency(e.target.value)}
+=======
+                onChange={e => setBudgetCurrency(e.target.value)}
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:ring-2 focus:ring-green-500 transition"
               >
                 {monedas.map((moneda) => (
@@ -294,6 +376,7 @@ export default function Dashboard() {
               <p className="text-gray-700 dark:text-gray-300">Gasto total este mes:</p>
               {Object.entries(gastoMesActualPorMoneda).length ? (
                 Object.entries(gastoMesActualPorMoneda).map(([currency, amount]) => (
+<<<<<<< HEAD
                   <p
                     key={currency}
                     className={
@@ -302,6 +385,9 @@ export default function Dashboard() {
                         : "text-gray-800 dark:text-gray-100"
                     }
                   >
+=======
+                  <p key={currency} className={amount > (budget.amount && currency === budgetCurrency) ? "text-red-600 dark:text-red-400" : "text-gray-800 dark:text-gray-100"}>
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
                     <strong>
                       {amount.toLocaleString(undefined, {
                         style: "currency",
@@ -340,6 +426,7 @@ export default function Dashboard() {
         </div>
       </motion.section>
 
+<<<<<<< HEAD
       {/* Filtros */}
       <motion.section
         variants={childVariants}
@@ -426,6 +513,8 @@ export default function Dashboard() {
         </div>
       </motion.section>
 
+=======
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
       {/* Resumen por Categoría */}
       <motion.section
         variants={childVariants}
@@ -494,7 +583,11 @@ export default function Dashboard() {
           <FaChartPie className="text-purple-600 dark:text-purple-400" size={24} />
           <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Análisis de Gastos</h3>
         </div>
+<<<<<<< HEAD
         <SummaryChart expenses={filteredExpenses} />
+=======
+        <SummaryChart expenses={expenses} />
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
       </motion.section>
 
       {/* Formulario de Transacciones */}
@@ -508,8 +601,13 @@ export default function Dashboard() {
         </div>
         <ExpenseForm
           onAdd={handleAddExpense}
+<<<<<<< HEAD
           categories={categories}
           setCategories={setCategories}
+=======
+          expenseCategories={expenseCategories}
+          incomeCategories={incomeCategories}
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
           monedas={monedas}
         />
       </motion.section>
@@ -524,9 +622,16 @@ export default function Dashboard() {
           <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Transacciones</h3>
         </div>
         <ExpenseList
+<<<<<<< HEAD
           items={filteredExpenses}
           onDelete={handleDeleteExpense}
           categories={categories}
+=======
+          items={expenses}
+          onDelete={handleDeleteExpense}
+          expenseCategories={expenseCategories}
+          incomeCategories={incomeCategories}
+>>>>>>> 347c1d0324f243c21b47056b32a2ce30ddb9d001
         />
       </motion.section>
     </motion.div>
