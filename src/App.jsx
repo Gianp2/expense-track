@@ -46,12 +46,7 @@ function App() {
             animate="visible"
             whileHover="hover"
           >
-            <img
-              src="logo.png"
-              alt="ExpenseTrack Logo"
-              className="h-8 w-8 object-contain"
-              aria-hidden="true"
-            />
+            {/* Logo eliminado */}
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
               Expense Track
             </h1>
@@ -71,7 +66,7 @@ function App() {
                 className="hover:underline flex items-center gap-1 text-gray-600 dark:text-gray-300"
               >
                 <FaUserPlus /> Registro
-                </Link>
+              </Link>
             </>
           ) : (
             <>
