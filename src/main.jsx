@@ -5,14 +5,12 @@ import App from "./App.jsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthContext.jsx";
-import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/expense-track"> {/* 👈 RUTA BASE agregada */}
       <AuthProvider>
         <App />
-        <Toaster position="top-right" reverseOrder={false} />
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
