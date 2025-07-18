@@ -7,7 +7,6 @@ import Dashboard from "./pages/Dashboard";
 import { useAuth } from "./auth/AuthContext";
 import { Toaster } from "react-hot-toast";
 
-// Animaciones para el título
 const titleVariants = {
   hidden: { opacity: 0, y: -10 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
@@ -15,11 +14,18 @@ const titleVariants = {
 };
 
 function App() {
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl">
+        Cargando...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white">
-      {/* Toaster global */}
       <Toaster
         position="top-right"
         toastOptions={{
@@ -27,16 +33,11 @@ function App() {
             background: "#1F2937",
             color: "#fff",
           },
-          success: {
-            style: { background: "#10B981" },
-          },
-          error: {
-            style: { background: "#EF4444" },
-          },
+          success: { style: { background: "#10B981" } },
+          error: { style: { background: "#EF4444" } },
         }}
       />
 
-      {/* Navegación mejorada */}
       <nav className="p-4 bg-white dark:bg-gray-800 shadow flex justify-between items-center flex-wrap">
         <Link to={user ? "/dashboard" : "/"} aria-label="ExpenseTrack - Volver al inicio">
           <motion.div
@@ -46,7 +47,6 @@ function App() {
             animate="visible"
             whileHover="hover"
           >
-            {/* Logo eliminado */}
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
               Expense Track
             </h1>
@@ -55,16 +55,10 @@ function App() {
         <div className="space-x-4 mt-2 md:mt-0 flex items-center">
           {!user ? (
             <>
-              <Link
-                to="/login"
-                className="hover:underline flex items-center gap-1 text-gray-600 dark:text-gray-300"
-              >
+              <Link to="/login" className="hover:underline flex items-center gap-1 text-gray-600 dark:text-gray-300">
                 <FaSignInAlt /> Login
               </Link>
-              <Link
-                to="/register"
-                className="hover:underline flex items-center gap-1 text-gray-600 dark:text-gray-300"
-              >
+              <Link to="/register" className="hover:underline flex items-center gap-1 text-gray-600 dark:text-gray-300">
                 <FaUserPlus /> Registro
               </Link>
             </>
@@ -78,7 +72,6 @@ function App() {
                 whileTap={{ scale: 0.95 }}
                 onClick={logout}
                 className="bg-red-600 text-white px-3 py-1 rounded flex items-center gap-2 hover:bg-red-700 transition"
-                aria-label="Cerrar sesión"
               >
                 <FaSignOutAlt /> Salir
               </motion.button>
@@ -87,7 +80,6 @@ function App() {
         </div>
       </nav>
 
-      {/* Rutas */}
       <Routes>
         <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
